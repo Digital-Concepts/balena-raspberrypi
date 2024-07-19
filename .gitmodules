@@ -1,6 +1,6 @@
 [submodule "layers/poky"]
 	path = layers/poky
-	url = https://github.com/balena-os/poky
+	url = https://github.com/Digital-Concepts/poky
 	branch = kirkstone
 [submodule "layers/meta-openembedded"]
 	path = layers/meta-openembedded
@@ -12,7 +12,7 @@
 	branch = kirkstone
 [submodule "layers/meta-balena"]
 	path = layers/meta-balena
-	url = https://github.com/balena-os/meta-balena.git
+	url = https://github.com/Digital-Concepts/meta-balena
 	branch = master
 [submodule "balena-yocto-scripts"]
 	path = balena-yocto-scripts
