@@ -9,11 +9,6 @@ HOMEPAGE = "http://roy.marples.name/projects/dhcpcd/"
 LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ba9c7e534853aaf3de76c905b2410ffd"
 
-#SRC_URI = "http://deb.debian.org/debian/pool/main/d/dhcpcd/dhcpcd_10.0.6.orig.tar.xz \
-#           file://dhcpcd.service \
-#           file://dhcpcd@.service \
-#           "
-#SRC_URI[sha256sum] = "779d3ae514e8f24d7449503e1f0a20f5137c773bd04ca98c62386bf81e99f482"
 
 SRC_URI = "git://github.com/NetworkConfiguration/dhcpcd;protocol=https;branch=master \
            file://0001-remove-INCLUDEDIR-to-prevent-build-issues.patch \
@@ -21,6 +16,7 @@ SRC_URI = "git://github.com/NetworkConfiguration/dhcpcd;protocol=https;branch=ma
            file://dhcpcd.service \
            file://dhcpcd@.service \
            file://0001-dhcpcd.8-Fix-conflict-error-when-enable-multilib.patch \
+           file://dhcpcd.conf \
            "
 
 
@@ -57,6 +53,12 @@ USERADD_PACKAGES = "${PN}"
 USERADD_PARAM:${PN} = "--system -d ${DBDIR} -M -s /bin/false -U dhcpcd"
 
 do_install:append () {
+    # install custom dhcpcd.conf
+    install -d ${D}${sysconfdir}
+    install -m 0644 ${WORKDIR}/dhcpcd.conf ${D}${sysconfdir}/dhcpcd.conf
+    chmod 700 ${D}${DBDIR}
+    chown dhcpcd:dhcpcd ${D}${DBDIR}
+
     # install systemd unit files
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/dhcpcd*.service ${D}${systemd_system_unitdir}
@@ -65,3 +67,4 @@ do_install:append () {
 }
 
 FILES:${PN}-dbg += "${libdir}/dhcpcd/dev/.debug"
+FILES:${PN} += "${sysconfdir}/dhcpcd.conf"
