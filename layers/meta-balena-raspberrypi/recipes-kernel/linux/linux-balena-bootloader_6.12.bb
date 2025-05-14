@@ -1,14 +1,14 @@
-LINUX_VERSION ?= "6.1.64"
-LINUX_RPI_BRANCH ?= "rpi-6.1.y"
-LINUX_RPI_KMETA_BRANCH ?= "yocto-6.1"
+LINUX_VERSION ?= "6.12.25"
+LINUX_RPI_BRANCH ?= ""
+LINUX_RPI_KMETA_BRANCH ?= "yocto-6.12"
 
-SRCREV_machine = "dad5d57939cfae7af363e7c9862b59d33d96794b"
-SRCREV_meta = "f845a7f37d7114230d6609e2bd630070f2f6cd9b"
+SRCREV_machine = "166ef05dd8fcfafba2951f1c658e138d235dd04a"
+SRCREV_meta = "1f6ab68a1d86836bf1b82b791df03da3cfeacb3f"
 
 KMETA = "kernel-meta"
 
 SRC_URI = " \
-          git://github.com/raspberrypi/linux.git;name=machine;branch=${LINUX_RPI_BRANCH};protocol=https \
+          git://github.com/raspberrypi/linux.git;name=machine;nobranch=1;protocol=https \
           git://git.yoctoproject.org/yocto-kernel-cache;type=kmeta;name=meta;branch=${LINUX_RPI_KMETA_BRANCH};destsuffix=${KMETA} \
 "
 SRC_URI:remove = "file://initramfs-image-bundle.cfg"
