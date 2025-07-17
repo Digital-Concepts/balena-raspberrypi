@@ -1,0 +1,13 @@
+[Unit]
+Description=Force Ethernet to 100Mb/s Full Duplex
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/ethtool -s eth0 advertise 0x0F autoneg on
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+
