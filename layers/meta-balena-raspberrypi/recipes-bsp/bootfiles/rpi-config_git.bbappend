@@ -45,6 +45,8 @@ do_deploy:append:revpi-connect-4() {
 
 do_deploy:append:raspberrypicm4-ioboard-sb() {
     echo "dtoverlay=dwc2,dr_mode=host" >> ${DEPLOYDIR}/bootfiles/config.txt
+    # Remap audio pins to free GPIOs 40/41 for SPI0 EEPROM programming
+    echo "dtoverlay=audremap" >> ${DEPLOYDIR}/bootfiles/config.txt
 }
 
 do_deploy:append:raspberrypi3-unipi-neuron() {
@@ -91,25 +93,6 @@ dtoverlay=revpi-core
 EOF
     # prevent u-boot logging on uart
     sed -i 's/enable_uart=1//' ${DEPLOYDIR}/bootfiles/config.txt
-}
-
-do_deploy:append:raspberrypi4-edatec-sensing() {
-	# Disable spi0
-	sed -i '/dtparam=spi=on/ c\dtparam=spi=off' ${DEPLOYDIR}/bootfiles/config.txt
-
-	# Use the dt overlays required by the raspberrypicm4 sensing boards
-	echo "dtparam=ant2" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "dtparam=i2c_arm=on" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "enable_uart=1" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "otg_mode=1" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "dtoverlay=ed-sdhost" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "dtoverlay=i2c-rtc,pcf8563" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "dtoverlay=spi6-1cs,cs0_pin=18,cs0_spidev=disabled" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "dtoverlay=ed-mcp2515,spi6-0,oscillator=16000000,interrupt=7" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "dtoverlay=uart2" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "dtoverlay=uart3" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "dtoverlay=uart4" >> ${DEPLOYDIR}/bootfiles/config.txt
-	echo "dtoverlay=uart5" >> ${DEPLOYDIR}/bootfiles/config.txt
 }
 
 # On Raspberry Pi 3 and Raspberry Pi Zero WiFi, serial ttyS0 console is only

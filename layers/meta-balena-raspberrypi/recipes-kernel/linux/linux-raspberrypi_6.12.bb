@@ -1,9 +1,5 @@
-LINUX_VERSION ?= "6.12.25"
-LINUX_RPI_BRANCH ?= ""
-LINUX_RPI_KMETA_BRANCH ?= "yocto-6.12"
 
-SRCREV_machine = "166ef05dd8fcfafba2951f1c658e138d235dd04a"
-SRCREV_meta = "1f6ab68a1d86836bf1b82b791df03da3cfeacb3f"
+require linux-raspberrypi_6.12.inc
 
 KMETA = "kernel-meta"
 
