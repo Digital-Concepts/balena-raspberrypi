@@ -1,0 +1,13 @@
+TS=`date +%y%m%d%H%M%S,%N`
+
+if [ "$reason" = "IPV4LL" ]; then
+	if [ "$interface" = "eth0" ]; then
+		if [ -n "`echo $new_ip_address | grep ^169.254`" ]; then
+			route del default eth0
+			
+			if [ -n "`ifconfig | grep wlan0`" ]; then
+				ifup wlan0
+			fi
+		fi
+	fi
+fi
