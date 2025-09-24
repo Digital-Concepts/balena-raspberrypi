@@ -1,0 +1,32 @@
+#!/bin/sh
+
+case "$reason" in
+    BOUND|RENEW|REBIND|STATIC|INFORM)
+        # Make sure we have DNS information
+        if [ -n "$new_domain_name_servers" ]; then
+            logger -t dhcpcd "Waiting for dcgw-containers volume directory..."
+            # Wait until the config directory exists
+            while true; do
+                CONFIG_DIR=$(find /mnt/data/docker/volumes -name "*_dcgw-containers" -type d 2>/dev/null | head -1)
+                
+                if [ -n "$CONFIG_DIR" ] && [ -d "${CONFIG_DIR}/_data" ]; then
+                    break
+                fi
+                
+                sleep 1
+            done
+            
+            # Now write the DNS information
+            DNS_INFO_FILE="${CONFIG_DIR}/_data/containers.config"
+
+            if ! grep -q "^TZ=" "$DNS_INFO_FILE"; then
+                echo "TZ=Etc/UTC" >> "$DNS_INFO_FILE"
+            fi
+            sed -i '/^DNS=/d' "$DNS_INFO_FILE"
+            echo "DNS=\"$new_domain_name_servers\"" >> "$DNS_INFO_FILE"
+            logger -t dhcpcd "Updated DNS information for $interface in $DNS_INFO_FILE"
+        fi
+        ;;
+esac
+
+exit 0

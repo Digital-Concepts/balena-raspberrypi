@@ -5,7 +5,7 @@ Before=network.target
 Conflicts=connman.service
 
 [Service]
-ExecStart=/sbin/dhcpcd -q --nobackground
+ExecStart=/sbin/dhcpcd -q -B --nobackground
 
 [Install]
 WantedBy=multi-user.target
