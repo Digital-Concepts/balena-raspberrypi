@@ -4,8 +4,8 @@ DESCRIPTION = "dhcpcd runs on your machine and silently configures your \
                computer to work on the attached networks without trouble \
                and mostly without configuration."
 
-LICENSE = "CLOSED"
-#LIC_FILES_CHKSUM = "file://LICENSE;md5=ba9c7e534853aaf3de76c905b2410ffd"
+LICENSE = "BSD-2-Clause"
+LIC_FILES_CHKSUM = "file://usr/share/doc/dcgw-dhcpcd5/copyright;md5=012caf0fa0ed7f9777abbfd400e91c28"
 
 #tar -czf dhcpcd-debian.tar.gz extracted/ 
 # mv dhcpcd-debian.tar.gz files/
@@ -64,8 +64,15 @@ do_install() {
 
     # Install additional files
     install -d ${D}${localstatedir}/lib/dhcpcd5
+    # Create the actual files in writable location
+    touch ${D}${localstatedir}/lib/dhcpcd5/dhcpcd.secret
+    touch ${D}${localstatedir}/lib/dhcpcd5/dhcpcd.duid
+    
+    # Create symlinks from /etc to writable locations
+    ln -sf /var/lib/dhcpcd5/dhcpcd.secret ${D}${sysconfdir}/dhcpcd.secret
+    ln -sf /var/lib/dhcpcd5/dhcpcd.duid ${D}${sysconfdir}/dhcpcd.duid
 
-    # Remove unnecessary /DEBIAN directory
+    # Remove unnecessary /DEBIAN directory if there.
     rm -rf ${S}/DEBIAN
 }
 
