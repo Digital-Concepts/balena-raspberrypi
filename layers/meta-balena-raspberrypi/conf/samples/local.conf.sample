@@ -106,3 +106,13 @@ LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
 
 # CycloneDX SBOM and VEX generation
 INHERIT += "cyclonedx-export"
+
+# Barys: Additional variables
+IMAGE_INSTALL:append = " dhcpcd5 ethtool swap-manager ethernet-config dbus dbus-glib"
+
+PACKAGECONFIG:remove = "avahi"
+DISTRO_FEATURES:remove = "avahi zeroconf"
+
+ENABLE_UART = "1"
+OS_DEVELOPMENT:raspberrypi3-64 = "1"
+

@@ -18,10 +18,6 @@ case "$reason" in
             
             # Now write the DNS information
             DNS_INFO_FILE="${CONFIG_DIR}/_data/containers.config"
-
-            if ! grep -q "^TZ=" "$DNS_INFO_FILE"; then
-                echo "TZ=Etc/UTC" >> "$DNS_INFO_FILE"
-            fi
             sed -i '/^DNS=/d' "$DNS_INFO_FILE"
             echo "DNS=\"$new_domain_name_servers\"" >> "$DNS_INFO_FILE"
             logger -t dhcpcd "Updated DNS information for $interface in $DNS_INFO_FILE"
