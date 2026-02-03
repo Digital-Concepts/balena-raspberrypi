@@ -44,6 +44,8 @@ do_install() {
     # Install hooks and scripts
     install -d ${D}${libdir}/dhcpcd
     cp -r ${S}/lib/dhcpcd/* ${D}${libdir}/dhcpcd/
+    # Make sure all dhcpcd hook scripts are executable
+    chmod 0755 ${D}${libdir}/dhcpcd/dhcpcd-hooks/*
     install -d ${D}${datadir}/dhcpcd/hooks
     cp -r ${S}/usr/share/dhcpcd/hooks/* ${D}${datadir}/dhcpcd/hooks/
     # Install configuration files
