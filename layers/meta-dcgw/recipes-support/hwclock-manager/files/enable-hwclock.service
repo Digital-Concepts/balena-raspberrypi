@@ -1,0 +1,13 @@
+[Unit]
+Description=Initialize RTC Hardware Clock
+DefaultDependencies=no
+Before=time-set.target
+After=systemd-modules-load.service systemd-udev-settle.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/enable-hwclock.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target
