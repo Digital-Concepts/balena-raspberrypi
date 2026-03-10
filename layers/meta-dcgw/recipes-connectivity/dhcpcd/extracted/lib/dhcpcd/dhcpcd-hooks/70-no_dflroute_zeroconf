@@ -1,13 +1,28 @@
 TS=`date +%y%m%d%H%M%S,%N`
+logger -t dhcpcd "70-no_dflroute_zeroconf: reason=$reason interface=$interface"
 
 if [ "$reason" = "IPV4LL" ]; then
 	if [ "$interface" = "eth0" ]; then
-		if [ -n "`echo $new_ip_address | grep ^169.254`" ]; then
-			route del default eth0
-			
-			if [ -n "`ifconfig | grep wlan0`" ]; then
-				ifup wlan0
+		ETH0_IP=`ip -4 addr show eth0 2>/dev/null | grep 'inet 169\.254\.' | awk '{print $2}'`
+		if [ -n "`echo $new_ip_address | grep ^169.254`" ] || [ -n "$ETH0_IP" ]; then
+			ip route del default dev eth0 2>/dev/null
+			ip route add default dev eth0 metric 2000 2>/dev/null
+
+			if [ -n "`ifconfig | grep wlan0`" ] && [ -z "`ip route show default dev wlan0`" ]; then
+				nmcli device connect wlan0
+			fi
+			# check if this script was running too often - then disable eth0
+			logfile=urgs_`date +%y%m%d%H%M`
+			logdir=/tmp/no_dflroute_zeroconf
+
+			mkdir -p $logdir
+			touch $logdir/$logfile
+			ls -1 $logdir/* | grep urgs | grep -v $logfile | xargs --no-run-if-empty rm -f
+			echo $TS >> $logdir/$logfile
+			if [ `cat $logdir/$logfile | wc -l` -gt 10 ]; then
+				ifconfig eth0 down
 			fi
 		fi
 	fi
 fi
+#17.1.5

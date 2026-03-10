@@ -1,4 +1,5 @@
 # Set the hostname from DHCP data if required
+logger -t dhcpcd "30-hostname: reason=$reason interface=$interface"
 
 # A hostname can either be a short hostname or a FQDN.
 # hostname_fqdn=true
