@@ -43,12 +43,6 @@ do_deploy:append:revpi-connect-4() {
 	echo "dtparam=ant2" >> ${DEPLOYDIR}/bootfiles/config.txt
 }
 
-do_deploy:append:raspberrypicm4-ioboard-sb() {
-    echo "dtoverlay=dwc2,dr_mode=host" >> ${DEPLOYDIR}/bootfiles/config.txt
-    # Remap audio pins to free GPIOs 40/41 for SPI0 EEPROM programming
-    echo "dtoverlay=audremap" >> ${DEPLOYDIR}/bootfiles/config.txt
-}
-
 do_deploy:append:raspberrypi3-unipi-neuron() {
 	# Use the dt overlays required by the UniPi Neuron family of boards
 	echo "dtoverlay=neuronee" >> ${DEPLOYDIR}/bootfiles/config.txt
@@ -80,19 +74,6 @@ do_deploy:append:raspberrypi4-unipi-neuron() {
 	echo "dtoverlay=neuronee" >> ${DEPLOYDIR}/bootfiles/config.txt
 	echo "dtoverlay=i2c-rtc,mcp7941x" >> ${DEPLOYDIR}/bootfiles/config.txt
 	echo "dtoverlay=neuron-spi-new" >> ${DEPLOYDIR}/bootfiles/config.txt
-}
-
-do_deploy:append:revpi-core-3() {
-    cat >> ${DEPLOYDIR}/bootfiles/config.txt << EOF
-
-# serial port needs to be kept clean for RS485 communication
-avoid_warnings=1
-
-dtoverlay=revpi-core
-
-EOF
-    # prevent u-boot logging on uart
-    sed -i 's/enable_uart=1//' ${DEPLOYDIR}/bootfiles/config.txt
 }
 
 # On Raspberry Pi 3 and Raspberry Pi Zero WiFi, serial ttyS0 console is only

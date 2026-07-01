@@ -75,7 +75,7 @@ permissions:
 jobs:
   yocto:
     name: Yocto
-    uses: balena-os/balena-yocto-scripts/.github/workflows/yocto-build-deploy.yml@db2ff5e0c3c5fa09ea62a166365ea1fe9e946c7a
+    uses: balena-os/balena-yocto-scripts/.github/workflows/yocto-build-deploy.yml@23eb6005eba2a46be19a28a8e94d382257966b52
     # Prevent duplicate workflow executions for pull_request (PR) and pull_request_target (PRT) events.
     # Both PR and PRT will be triggered for the same pull request, whether it is internal or from a fork.
     # This condition will prevent the workflow from running twice for the same pull request while
@@ -83,7 +83,9 @@ jobs:
     if: (github.event.pull_request.head.repo.full_name == github.repository) == (github.event_name == 'pull_request')
     secrets: inherit
     with:
-      machine: raspberrypicm4-ioboard-sb
+      machine: raspberrypicm4-ioboard
+      slug: raspberrypicm4-ioboard-sb
+      build-args: '--templates-path layers/meta-balena-rpi-sb/conf/samples/raspberrypicm4-ioboard'
       # Hardcode the device repo in case this workflow is called by another workflow
       device-repo: balena-os/balena-raspberrypi
       device-repo-ref: ${{ inputs.device-repo-ref || github.ref }}
